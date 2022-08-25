@@ -8,7 +8,7 @@ import {Table} from "../../components/common/Table";
 import TableBody from "../../components/TableBody";
 import {SecondaryBtn} from "../../components/common/SecondaryBtn";
 import TableFooter from "../../components/TableFooter";
-import { split} from 'ramda'
+import {split} from 'ramda'
 import {useGetPeopleByPageQuery} from "../../store/services/peopleApi";
 import {useFilter} from "../../hooks/useFilter";
 import {Hearts} from "react-loader-spinner";
@@ -45,7 +45,9 @@ const Main = () => {
             <TableContainer>
                 <Header title="People" subtitle="A list of people, click on the planet link"/>
                 <FilterContainer>
-                    <input disabled={isLoading} ref={filterRef} type="text" name="filter" onChange={handleFilterChange}/>
+                    <Label>Filter by name: </Label>
+                    <input disabled={isLoading} ref={filterRef} type="text" name="filter"
+                           onChange={handleFilterChange}/>
                 </FilterContainer>
                 <Table size={Object.keys(COLUMNS).length}>
                     <Theader columns={COLUMNS}/>
@@ -70,6 +72,24 @@ const Main = () => {
     )
 }
 
+const FilterContainer = styled.div`
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  background: ${colors.light};
+  padding: 1rem 2rem;
+  border-radius: 5px;
+  gap: 1rem;
+`
+const Label = styled.label`
+  display: flex;
+  align-items: start;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: ${colors.secondary};
+`
 const Loader = styled.div`
   grid-column: 1/-1;
   width: 100%;
@@ -93,11 +113,10 @@ const TableContainer = styled.div`
   width: auto;
   height: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: start;
+  margin-top: 4rem;
   flex-direction: column;
 `
-
-const FilterContainer = styled.div``
 
 
 export default Main
