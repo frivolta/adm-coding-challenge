@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import {Main} from './modules';
 import reportWebVitals from './reportWebVitals';
 import {css, Global} from '@emotion/react'
 // @ToDo: Inject styles as docs
@@ -8,6 +7,7 @@ import normalize from './globals/normalize.css'
 import fonts from './globals/fonts.css'
 import {Provider} from "react-redux";
 import {store} from "./store";
+import Default from "./pages/default";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,7 +17,7 @@ root.render(
           ${fonts}
         `}/>
         <Provider store={store}>
-            <Main/>
+            <Default/>
         </Provider>
     </React.StrictMode>
 );

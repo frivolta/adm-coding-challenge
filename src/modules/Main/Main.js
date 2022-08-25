@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import {useRef, useState} from "react";
+import {forwardRef, useRef, useState} from "react";
 import {colors} from "../../globals/theme";
 import COLUMNS from "../../core/tables/general";
 import Header from "../../components/Header";
@@ -8,47 +8,18 @@ import {Table} from "../../components/common/Table";
 import TableBody from "../../components/TableBody";
 import {SecondaryBtn} from "../../components/common/SecondaryBtn";
 import TableFooter from "../../components/TableFooter";
-import {split} from 'ramda'
-import {useGetPeopleByPageQuery} from "../../store/services/peopleApi";
-import {useFilter} from "../../hooks/useFilter";
 import {Hearts} from "react-loader-spinner";
 import Loader from "../../components/common/Loader";
 import Label from "../../components/common/Label";
 
-const getPageNumber = (url) => url ? split('=')(url)[1] : null
-const getPageFromData = (data) => [getPageNumber(data?.previous), getPageNumber(data?.next)]
-
-
-const Main = () => {
-    const [page, setPage] = useState(1)
-    const {data, isLoading, isSuccess} = useGetPeopleByPageQuery(page)
-    const {filteredData, filterData} = useFilter({data, isSuccess}, 'name')
-    const filterRef = useRef('')
-
-    const handleFilterChange = (e) => filterData(e?.target?.value ?? '')
-    const clearFilter = () => {
-        handleFilterChange()
-        filterRef.current.value = ''
-    }
-
-
-    const getNextPeople = () => {
-        clearFilter()
-        setPage(getPageFromData(data)[1])
-    }
-
-    const getPrevPeople = () => {
-        clearFilter()
-        setPage(getPageFromData(data)[0])
-    }
-
+const Main = forwardRef(({data, filteredData, getNextPeople, getPrevPeople, isLoading, isSuccess, handleFilterChange}, ref) => {
     return (
         <Layout>
             <TableContainer>
                 <Header title="People" subtitle="A list of people, click on the planet link"/>
                 <FilterContainer>
                     <Label>Filter by name: </Label>
-                    <input disabled={isLoading} ref={filterRef} type="text" name="filter"
+                    <input disabled={isLoading} ref={ref} type="text" name="filter"
                            onChange={handleFilterChange}/>
                 </FilterContainer>
                 <Table size={Object.keys(COLUMNS).length}>
@@ -72,7 +43,7 @@ const Main = () => {
             </TableContainer>
         </Layout>
     )
-}
+})
 
 const FilterContainer = styled.div`
   margin-top: 1rem;
