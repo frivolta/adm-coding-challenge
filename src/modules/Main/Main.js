@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import {useEffect, useState} from "react";
+import {useRef, useState} from "react";
 import {colors} from "../../globals/theme";
 import COLUMNS from "../../core/tables/general";
 import Header from "../../components/Header";
@@ -8,44 +8,76 @@ import {Table} from "../../components/common/Table";
 import TableBody from "../../components/TableBody";
 import {SecondaryBtn} from "../../components/common/SecondaryBtn";
 import TableFooter from "../../components/TableFooter";
+import { split} from 'ramda'
+import {useGetPeopleByPageQuery} from "../../store/services/peopleApi";
+import {useFilter} from "../../hooks/useFilter";
+import {Hearts} from "react-loader-spinner";
+
+const getPageNumber = (url) => url ? split('=')(url)[1] : null
+const getPageFromData = (data) => [getPageNumber(data?.previous), getPageNumber(data?.next)]
+
 
 const Main = () => {
-    const [people, setPeople] = useState([])
-    const [nextPage, setNextPage] = useState(null)
-    const [prevPage, setPrevPage] = useState(null)
+    const [page, setPage] = useState(1)
+    const {data, isLoading, isSuccess} = useGetPeopleByPageQuery(page)
+    const {filteredData, filterData} = useFilter({data, isSuccess}, 'name')
+    const filterRef = useRef('')
 
-    const getPeople = (page) => fetch(page || 'https://swapi.dev/api/people?page=1')
-        .then(res => res.json()).then(people => {
-            setNextPage(people.next)
-            setPrevPage(people.previous)
-            setPeople([...people.results])
-        })
+    const handleFilterChange = (e) => filterData(e?.target?.value ?? '')
+    const clearFilter = () => {
+        handleFilterChange()
+        filterRef.current.value = ''
+    }
 
-    useEffect(() => {
-        void getPeople()
-    }, [])
 
-    const getNextPeople = ()=>getPeople(nextPage)
-    const getPrevPeople = ()=>getPeople(prevPage)
+    const getNextPeople = () => {
+        clearFilter()
+        setPage(getPageFromData(data)[1])
+    }
+
+    const getPrevPeople = () => {
+        clearFilter()
+        setPage(getPageFromData(data)[0])
+    }
 
     return (
         <Layout>
             <TableContainer>
                 <Header title="People" subtitle="A list of people, click on the planet link"/>
+                <FilterContainer>
+                    <input disabled={isLoading} ref={filterRef} type="text" name="filter" onChange={handleFilterChange}/>
+                </FilterContainer>
                 <Table size={Object.keys(COLUMNS).length}>
-                    <Theader data={people} column={COLUMNS}/>
-                    <TableBody data={people} columns={COLUMNS}/>
+                    <Theader columns={COLUMNS}/>
+                    {isLoading && <Loader><Hearts
+                        height="40"
+                        width="40"
+                        radius="9"
+                        color={colors.background}
+                        ariaLabel='loading'
+                        wrapperStyle
+                        wrapperClass
+                    /></Loader>}
+                    {isSuccess && <TableBody data={filteredData} columns={COLUMNS}/>}
+                    <TableFooter>
+                        {isSuccess &&
+                        <SecondaryBtn onClick={getPrevPeople} disabled={!data.previous}>Prev</SecondaryBtn>}
+                        {isSuccess && <SecondaryBtn onClick={getNextPeople} disabled={!data.next}>Next</SecondaryBtn>}
+                    </TableFooter>
                 </Table>
-                <TableFooter>
-                    <SecondaryBtn onClick={getPrevPeople} disabled={!prevPage}>Prev</SecondaryBtn>
-                    <SecondaryBtn onClick={getNextPeople} disabled={!nextPage}>Next</SecondaryBtn>
-                </TableFooter>
             </TableContainer>
         </Layout>
     )
 }
 
-
+const Loader = styled.div`
+  grid-column: 1/-1;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+`
 const Layout = styled.div`
   background-color: ${colors.background};
   width: 100%;
@@ -64,6 +96,8 @@ const TableContainer = styled.div`
   justify-content: center;
   flex-direction: column;
 `
+
+const FilterContainer = styled.div``
 
 
 export default Main

@@ -4,11 +4,11 @@ import {Tr} from "../common/Tr";
 import {Thead} from "../common/Thead";
 import {Th} from "../common/Th";
 
-const TableHeader = memo((data, columns) =>{
+const TableHeader = memo(({columns}) =>{
     return (
         <Thead>
             <Tr>
-                {Object.entries(COLUMNS).map(([k, v]) => {
+                {Object.entries(columns).map(([k, v]) => {
                     return <Th key={k}>{v.header}</Th>
                 })}
             </Tr>

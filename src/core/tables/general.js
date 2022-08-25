@@ -22,8 +22,8 @@ const COLUMNS = {
         render: null
     },
     created: {
-        value: 'name',
-        header: 'Name',
+        value: 'created',
+        header: 'Created',
         formatterFn: toReadableDate,
         render: null
     },

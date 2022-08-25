@@ -6,6 +6,8 @@ import {css, Global} from '@emotion/react'
 // @ToDo: Inject styles as docs
 import normalize from './globals/normalize.css'
 import fonts from './globals/fonts.css'
+import {Provider} from "react-redux";
+import {store} from "./store";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -14,7 +16,9 @@ root.render(
           ${normalize}
           ${fonts}
         `}/>
+        <Provider store={store}>
             <Main/>
+        </Provider>
     </React.StrictMode>
 );
 
