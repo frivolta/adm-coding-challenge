@@ -2,25 +2,25 @@ const COLUMNS = {
     name: {
         value: 'name',
         header: 'Name',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     },
     diameter: {
         value: 'diameter',
         header: 'Diameter',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     },
     climate: {
         value: 'climate',
         header: 'Climate',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     },
     population: {
         value: 'population',
         header: 'Population',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     }
 }

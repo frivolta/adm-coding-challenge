@@ -2,43 +2,47 @@ import {SecondaryBtn} from "../../components/common/SecondaryBtn";
 
 const toReadableDate = (date) => new Date(date).toDateString()
 
-const COLUMNS = {
+const COLUMNS =(handleSetPlanet)=> ({
     name: {
         value: 'name',
         header: 'Name',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     },
     height: {
         value: 'height',
         header: 'Height',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     },
     mass: {
         value: 'mass',
         header: 'Mass',
-        formatterFn: null,
+        formatterOrHandlerFn: null,
         render: null
     },
     created: {
         value: 'created',
         header: 'Created',
-        formatterFn: toReadableDate,
+        formatterOrHandlerFn: toReadableDate,
         render: null
     },
     edited: {
         value: 'edited',
         header: 'Edited',
-        formatterFn: toReadableDate,
+        formatterOrHandlerFn: toReadableDate,
         render: null
     },
     homeworld: {
         value: 'homeworld',
         header: 'Home world',
-        formatterFn: null,
-        render: (planet) => <SecondaryBtn as="a" href={planet.homeworld}>See</SecondaryBtn>
+        formatterOrHandlerFn: (v)=>handleSetPlanet(v),
+        render: ([fn, value])=> {
+            const regex = /\/(\d+)\/$/
+            const match = regex.exec(value)
+            return <SecondaryBtn onClick={()=>fn(match[1])}>See</SecondaryBtn>
+        }
     },
-}
+})
 
 export default COLUMNS

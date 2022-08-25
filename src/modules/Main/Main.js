@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import {forwardRef, useRef, useState} from "react";
 import {colors} from "../../globals/theme";
-import COLUMNS from "../../core/tables/general";
+import columns from "../../core/tables/general";
 import Header from "../../components/Header";
 import Theader from "../../components/TableHeader";
 import {Table} from "../../components/common/Table";
@@ -12,7 +12,7 @@ import {Hearts} from "react-loader-spinner";
 import Loader from "../../components/common/Loader";
 import Label from "../../components/common/Label";
 
-const Main = forwardRef(({data, filteredData, getNextPeople, getPrevPeople, isLoading, isSuccess, handleFilterChange}, ref) => {
+const Main = forwardRef(({columns, data, filteredData, getNextPeople, getPrevPeople, isLoading, isSuccess, handleFilterChange}, ref) => {
     return (
         <Layout>
             <TableContainer>
@@ -22,8 +22,8 @@ const Main = forwardRef(({data, filteredData, getNextPeople, getPrevPeople, isLo
                     <input disabled={isLoading} ref={ref} type="text" name="filter"
                            onChange={handleFilterChange}/>
                 </FilterContainer>
-                <Table size={Object.keys(COLUMNS).length}>
-                    <Theader columns={COLUMNS}/>
+                <Table size={Object.keys(columns).length}>
+                    <Theader columns={columns}/>
                     {isLoading && <Loader><Hearts
                         height="40"
                         width="40"
@@ -33,7 +33,7 @@ const Main = forwardRef(({data, filteredData, getNextPeople, getPrevPeople, isLo
                         wrapperStyle
                         wrapperClass
                     /></Loader>}
-                    {isSuccess && <TableBody data={filteredData} columns={COLUMNS}/>}
+                    {isSuccess && <TableBody data={filteredData} columns={columns}/>}
                     <TableFooter>
                         {isSuccess &&
                         <SecondaryBtn onClick={getPrevPeople} disabled={!data.previous}>Prev</SecondaryBtn>}
