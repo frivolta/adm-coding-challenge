@@ -7,6 +7,7 @@ export const colors = {
     secondary: '#4b5563',
     tertiary: '#E5E6E8',
     headers: '#F9FAFB',
+    lightRGBA: 'rgba(255,255,255, 0.7)'
 }
 
 export const noWrap = css`

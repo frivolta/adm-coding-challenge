@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
 import {css, Global} from '@emotion/react'
 // @ToDo: Inject styles as docs
 import normalize from './globals/normalize.css'
@@ -8,6 +7,8 @@ import fonts from './globals/fonts.css'
 import {Provider} from "react-redux";
 import {store} from "./store";
 import Default from "./pages/default";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -17,8 +18,13 @@ root.render(
           ${fonts}
         `}/>
         <Provider store={store}>
-            <Default/>
+            <BrowserRouter>
+                <Routes>
+                   <Route path="/" element={<Default/>}/>
+                </Routes>
+            </BrowserRouter>
         </Provider>
+
     </React.StrictMode>
 );
 

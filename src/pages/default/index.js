@@ -3,20 +3,21 @@ import {split} from 'ramda'
 import {useGetPeopleByPageQuery} from "../../store/services/peopleApi";
 import {useFilter} from "../../hooks/useFilter";
 import {Main, ModalContainer} from "../../modules";
-import Modal from "../../components/Modal";
 import COLUMNS from "../../core/tables/general";
+import {useModal} from "../../hooks/useModal";
+import {useSearchParams} from "react-router-dom";
 
 const getPageNumber = (url) => url ? split('=')(url)[1] : null
 const getPageFromData = (data) => [getPageNumber(data?.previous), getPageNumber(data?.next)]
 
 
 const Default = () => {
-    const [page, setPage] = useState(1)
-    const {data, isLoading, isSuccess} = useGetPeopleByPageQuery(page)
+    const [searchParams, setSearchParams] = useSearchParams();
+    const {data, isLoading, isSuccess} = useGetPeopleByPageQuery(searchParams.get('page')||1)
     const {filteredData, filterData} = useFilter({data, isSuccess}, 'name')
+    const { planet, setPlanet, isOpen, setIsOpen }=useModal()
+
     const filterRef = useRef('')
-    const [planet, setPlanet] = useState(1)
-    const [isOpen, setIsOpen] = useState(false)
 
     const handleFilterChange = (e) => filterData(e?.target?.value ?? '')
     const clearFilter = () => {
@@ -26,11 +27,11 @@ const Default = () => {
 
     const getNextPeople = () => {
         clearFilter()
-        setPage(getPageFromData(data)[1])
+        setSearchParams({page: getPageFromData(data)[1]}, {replace: true})
     }
     const getPrevPeople = () => {
         clearFilter()
-        setPage(getPageFromData(data)[0])
+        setSearchParams({page: getPageFromData(data)[0]}, {replace: true})
     }
 
     return (
