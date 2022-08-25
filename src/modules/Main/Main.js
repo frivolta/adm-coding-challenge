@@ -12,6 +12,8 @@ import {split} from 'ramda'
 import {useGetPeopleByPageQuery} from "../../store/services/peopleApi";
 import {useFilter} from "../../hooks/useFilter";
 import {Hearts} from "react-loader-spinner";
+import Loader from "../../components/common/Loader";
+import Label from "../../components/common/Label";
 
 const getPageNumber = (url) => url ? split('=')(url)[1] : null
 const getPageFromData = (data) => [getPageNumber(data?.previous), getPageNumber(data?.next)]
@@ -82,22 +84,7 @@ const FilterContainer = styled.div`
   border-radius: 5px;
   gap: 1rem;
 `
-const Label = styled.label`
-  display: flex;
-  align-items: start;
-  font-size: 0.75rem;
-  font-weight: bold;
-  text-transform: uppercase;
-  color: ${colors.secondary};
-`
-const Loader = styled.div`
-  grid-column: 1/-1;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-`
+
 const Layout = styled.div`
   background-color: ${colors.background};
   width: 100%;
